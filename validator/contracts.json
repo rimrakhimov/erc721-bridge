@@ -1,0 +1,6 @@
+{
+  "ERC721Home": "0xa51120080cd19c6dd35a1154e3fdaa770555f746",
+  "HomeBridge": "0x4c2a04705a0a8d9ff9736016a4eaa0c55d56bc0a",
+  "ERC721Foreign": "0xa31d34725d97daf3a00e0cce2bbaac5c59282673",
+  "ForeignBridge": "0x3e042ff56f9f9d20188847a4c12984f844098434"
+}
