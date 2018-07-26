@@ -1,0 +1,5 @@
+.idea
+abi/ERC721Abi.json
+abi/ForeignBridgeAbi.json
+abi/HomeBridgeAbi.json
+additional_data
