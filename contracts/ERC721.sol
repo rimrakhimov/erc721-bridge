@@ -30,6 +30,7 @@ contract ERC721 {
     /// This emits when registration number for an NFT is changed.
     event TokenRegNumberChanged(string indexed _tokenVIN, string indexed _tokenRegNumber);
 
+    /// This emits when token with specified tokenVIN is recovered.
     event TokenRecovered(string _tokenVIN);
 
     // Equals to `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`
@@ -39,10 +40,13 @@ contract ERC721 {
     // Total number of token available on the blockchain
     uint256 public totalSupply;
 
+    // Address of account deployed the contract
     address contractOwner;
 
+    // Address of account which is allowed to call function "demolishToken"
     address allowedToDemolish;
 
+    // Address of account which is allowed to call function "recoveryToken"
     address allowedToRecover;
 
     // Mapping from account to number of token it owns
@@ -274,6 +278,9 @@ contract ERC721 {
         return size > 0;
     }
 
+    // Get serialized color and registration number of specified token
+    // @param _tokenVIN string VIN of the token serialized data has to be taken from
+    // @return bytes corresponding to serialized data
     function getSerializedData(string _tokenVIN) public view returns (bytes) {
         require(ownerOf(_tokenVIN) == msg.sender);
         bytes memory retval;
@@ -286,6 +293,16 @@ contract ERC721 {
         return (retval);
     }
 
+    // Recover specified token with its new metadata and transfer it to its owner.
+    // Function gets data in serialized form and deserializes it.
+    // If token with specified tokenVIN has already been produced, function call set
+    // color and registration number according to serialized data and return this token
+    // to its owner. Otherwise, function call produces new token with specified data and
+    // gives it to owner.
+    // Reverts if msg.sender is not allowed to recover tokens
+    // @param _owner address of owner token has to be recovered to
+    // @param _tokenVIN string VIN of the token has to be recovered
+    // @param _serializedData bytes of serialized metadata of token
     function recoveryToken(address _owner, string _tokenVIN, bytes _serializedData) public {
         require(msg.sender == allowedToRecover);
         string memory color;
@@ -301,7 +318,10 @@ contract ERC721 {
         }
     }
 
-    function deserealizeData(bytes _serializedData) public pure returns (string, string) {
+    // Internal function to deserialize metadata of token
+    // @param _serializedData bytes of serialized color and registration number
+    // @return two strings which are corresponded to color and registration number of token respectively
+    function deserealizeData(bytes _serializedData) internal pure returns (string, string) {
         uint256 len = getUintFromBytes(_serializedData, 0);
         uint256 offset = 32;
         string memory color = getStringFromBytes(_serializedData, offset, len);
@@ -311,6 +331,10 @@ contract ERC721 {
         return (color, regNumber);
     }
 
+    // Internal function to concatenate two set of bytes
+    // @param _to bytes new set of bytes has to be concatenated to
+    // @param _add set of 32 bytes has to be concatenated
+    // @return new set of bytes with result of concatenation
     function addToBytes(bytes _to, bytes32 _add) internal pure returns (bytes) {
         bytes memory retval = new bytes(_to.length + 32);
         for (uint256 i = 0; i < _to.length; i++) {
@@ -323,6 +347,10 @@ contract ERC721 {
         return retval;
     }
 
+    // Internal function to concatenate two set of bytes
+    // @param _to bytes new set of bytes has to be concatenated to
+    // @param _add set of bytes has to be concatenated
+    // @return new set of bytes with result of concatenation
     function addToBytes(bytes _to, bytes _add) internal pure returns (bytes) {
         bytes memory retval = new bytes(_to.length + _add.length);
         for (uint256 i = 0; i < _to.length; i++) {
@@ -335,7 +363,10 @@ contract ERC721 {
         return retval;
     }
 
-
+    // Internal function to get uint256 from set of bytes
+    // @param _serializedData bytes of serialized data which uint variable is serialized in
+    // @param _offset uint256 pointing on byte uint variable is serialized from
+    // @return uint256 which is serialized in given set of bytes from specified position
     function getUintFromBytes(bytes _serializedData, uint256 _offset) internal pure returns (uint256) {
         bytes32 out;
         for (uint256 i = 0; i < 32; i++) {
@@ -344,6 +375,11 @@ contract ERC721 {
         return uint256(out);
     }
 
+    // Internal function to get string from set of bytes
+    // @param _serializedData bytes of serialized data which string variable is serialized in
+    // @param _offset uint256 pointing on byte string variable is serialized from
+    // @param _len uint256 length of serialized string
+    // @return string which is serialized in given set of bytes from specified position
     function getStringFromBytes(bytes _serializedData, uint256 _offset, uint256 _len) internal pure returns (string) {
         bytes memory out = new bytes(_len);
         for (uint256 i=_offset; i < _offset+_len; i++) {
@@ -352,11 +388,15 @@ contract ERC721 {
         return string(out);
     }
 
+    // Set permission to specified address to call 'recoveryToken' function
+    // @param _allowed address of account which is allowed to recover tokens
     function setPermissionsToRecover(address _allowed) {
         require(msg.sender == contractOwner);
         allowedToRecover = _allowed;
     }
 
+    // Set permission to specified address to call 'demolishToken' function
+    // @param _allowed address of account which is allowed to demolish tokens
     function setPermissionsToDemolish(address _allowed) {
         require(msg.sender == contractOwner);
         allowedToDemolish = _allowed;

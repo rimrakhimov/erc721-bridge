@@ -1,10 +1,7 @@
-import time
-
+from time import sleep
 from web3 import Web3, HTTPProvider
-# from web3.utils.events import get_event_data
 from json import load, dump
-import os
-from pathlib import Path
+from os import path
 
 def initializeContractFactory(_w3, _path, _address):
     abi = getAbi(_path)
@@ -16,7 +13,7 @@ def initializeContractFactory(_w3, _path, _address):
 
 def getPrivateKey():
     privateKeyPath = "/privateKey.json"
-    if not os.path.exists(privateKeyPath):
+    if not path.exists(privateKeyPath):
         with open("./privateKey.json") as file:
             return load(file)["key"]
     else:
@@ -28,7 +25,7 @@ def getContractAddress():
         return load(file)
 
 def getLastProcessedBlock(_key):
-    if not os.path.exists(_key):
+    if not path.exists(_key):
         writeDataBase({"blockNumber": 0}, _key)
         return 0
     with open(_key) as f:
@@ -108,7 +105,7 @@ def main(_w3Home, _w3Foreign):
                 _w3Home.eth.waitForTransactionReceipt(tx_hash)
                 print(tx_hash.hex())
             writeDataBase({'blockNumber': receipt.blockNumber + 1}, lastProcessedForeignBlockPath)
-        time.sleep(5)
+        sleep(5)
 
 w3Home = Web3(HTTPProvider("https://sokol.poa.network/"))
 w3Foreign = Web3(HTTPProvider("https://kovan.infura.io/mew"))
