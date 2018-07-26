@@ -3,6 +3,7 @@ from web3 import Web3, HTTPProvider
 from json import load, dump
 from os import path
 
+# initialize contracts
 def initializeContractFactory(_w3, _path, _address):
     abi = getAbi(_path)
     contract = _w3.eth.contract(
@@ -11,6 +12,7 @@ def initializeContractFactory(_w3, _path, _address):
     )
     return contract
 
+# get private key from json file
 def getPrivateKey():
     privateKeyPath = "/privateKey.json"
     if not path.exists(privateKeyPath):
@@ -20,10 +22,12 @@ def getPrivateKey():
         print("Private key was not found")
         exit()
 
+# get contract address from json file
 def getContractAddress():
     with open("./contracts.json") as file:
         return load(file)
 
+# get last processed block from json file
 def getLastProcessedBlock(_key):
     if not path.exists(_key):
         writeDataBase({"blockNumber": 0}, _key)
@@ -31,10 +35,12 @@ def getLastProcessedBlock(_key):
     with open(_key) as f:
         return load(f)['blockNumber']
 
+# write _data in external _file
 def writeDataBase(_data, _file):
     with open(_file, 'w') as out:
         dump(_data, out)
 
+# get abi for contracts at specified path
 def getAbi(_path):
     with open(_path) as _file:
          abi = load(_file)
@@ -48,6 +54,7 @@ def main(_w3Home, _w3Foreign):
 
     acct = _w3Home.eth.account.privateKeyToAccount(getPrivateKey())
 
+    # infinite loop which processes both networks in row
     while True:
         print([])
         filterHome = {
