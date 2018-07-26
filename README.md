@@ -35,4 +35,4 @@ between two ethereum networks.
     (Example private key: '0x48656c6c6f2c20776f726c6448656c6c6f2c20776f726c6448656c6c6f2c2048').
     The address corresponded to specified private key should be listed as authority in bridge contracts
 2. Write down addresses of Home and Foreign Bridges in file [contracts.json](https://github.com/rimrakhimov/erc721-bridge/blob/master/validator/contracts.json)
-3. Run [bridge.py](https://github.com/rimrakhimov/erc721-bridge/blob/master/validator/bridge.py) that will be the main script of bridge
+3. Run [bridge.py](https://github.com/rimrakhimov/erc721-bridge/blob/master/validator/bridge.py) that will be the main script of the bridge
