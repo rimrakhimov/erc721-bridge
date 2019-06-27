@@ -1,36 +1,41 @@
 # Bridge for ERC721 token
-The goal of these contracts and scripts is to 
-allow users to transfer non-fungible tokens(NFT) 
+
+The goal of these contracts and scripts is to
+allow users to transfer non-fungible tokens(NFT)
 between two Ethereum networks.
 
-# Deployment steps
-## Home Deployment (Sokol)
+## Deployment steps
+
+### Home Deployment (Sokol)
+
 1. Deploy [ERC721 Token](https://github.com/rimrakhimov/erc721-bridge/blob/master/contracts/ERC721.sol)
-    (Example address: '0xa51120080cd19c6dd35a1154e3fdaa770555f746') 
+    (Example address: '0xa51120080cd19c6dd35a1154e3fdaa770555f746')
     that will be used as Home ERC721 contract
 2. Deploy [Bridge Contract](https://github.com/rimrakhimov/erc721-bridge/blob/master/contracts/Bridge.sol)
-    (Example address: '0xba1ecd4b35953cc578f773580e6aecd3128e5775') 
+    (Example address: '0xba1ecd4b35953cc578f773580e6aecd3128e5775')
     that will be used as Home Bridge contract.
-    To deploy, use the address of ERC721 contract which was deployed on step 1 
+    To deploy, use the address of ERC721 contract which was deployed on step 1
     as the first parameter.
     A second parameter is a number of signatures required to transfer NFT
-    from one network to another. 
+    from one network to another.
     The third one is an array with addresses of all authorities who can transfer NFT
 
-## Foreign Deployment (Kovan)
+### Foreign Deployment (Kovan)
+
 1. Deploy [ERC721 Token](https://github.com/rimrakhimov/erc721-bridge/blob/master/contracts/ERC721.sol)
-    (Example address: '0xa51120080cd19c6dd35a1154e3fdaa770555f746') 
+    (Example address: '0xa51120080cd19c6dd35a1154e3fdaa770555f746')
     that will be used as Foreign ERC721 contract
 2. Deploy [Bridge Contract](https://github.com/rimrakhimov/erc721-bridge/blob/master/contracts/Bridge.sol)
-    (Example address: '0xba1ecd4b35953cc578f773580e6aecd3128e5775') 
+    (Example address: '0xba1ecd4b35953cc578f773580e6aecd3128e5775')
     that will be used as Foreign Bridge contract.
-    To deploy, use the address of ERC721 contract which was deployed on step 1 
+    To deploy, use the address of ERC721 contract which was deployed on step 1
     as the first parameter.
     A second parameter is a number of signatures required to transfer NFT
-    from one network to another. 
+    from one network to another.
     The third one is an array with addresses of all authorities who can transfer NFT
-    
-# Running bridge
+
+## Running bridge
+
 1. Write down your private key in [privateKey.json](https://github.com/rimrakhimov/erc721-bridge/blob/master/validator/privateKey.json)
     (Example private key: '0x48656c6c6f2c20776f726c6448656c6c6f2c20776f726c6448656c6c6f2c2048').
     The address corresponded to specified private key should be listed as an authority in bridge contracts
